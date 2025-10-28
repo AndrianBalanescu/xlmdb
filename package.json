@@ -39,10 +39,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/xlmdb.git"
+    "url": "https://github.com/AndrianBalanescu/xlmdb.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/xlmdb/issues"
+    "url": "https://github.com/AndrianBalanescu/xlmdb/issues"
   },
-  "homepage": "https://github.com/yourusername/xlmdb#readme"
+  "homepage": "https://github.com/AndrianBalanescu/xlmdb#readme"
 }

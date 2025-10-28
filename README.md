@@ -12,7 +12,7 @@
 - 📊 **Custom sorting** - Sort results by any criteria
 - 🚀 **Type-safe** - Full TypeScript support with generics
 - ⚡ **Performance** - Built on LMDB's high-performance range queries
-- 🎨 **Simple API** - One function to rule them all: `searchHelper`
+- 🎨 **Simple API** - One function to rule them all: `search`
 
 ## Install
 
@@ -27,7 +27,7 @@ pnpm add xlmdb lmdb
 ## Quick Start
 
 ```typescript
-import { db, searchHelper } from "xlmdb";
+import { db, search } from "xlmdb";
 
 // Define your types
 type Product = {
@@ -56,10 +56,10 @@ await products.put("p2", {
   tags: ["kitchen", "coffee"]
 });
 
-// Search with filters, deep search, and sorting!
-const results = searchHelper(products, {
+// Search with filters, query, and sorting!
+const results = search(products, {
   filters: [p => p.price < 1000],           // Filter by price
-  deepSearch: "coffee",                      // Search in any field
+  query: "coffee",                          // Search in any field
   sort: (a, b) => b.price - a.price,         // Sort by price descending
   limit: 10                                  // Limit results
 });
@@ -74,14 +74,14 @@ For more control, use LMDB's native API:
 
 ```typescript
 import { open } from "lmdb";
-import { searchHelper } from "xlmdb";
+import { search } from "xlmdb";
 
 // Open database
 const db = open({ path: "./data" });
 const products = db.openDB<Product, string>({ name: "products" });
 
-// Use search helper
-const results = searchHelper(products, {
+// Use search function
+const results = search(products, {
   filters: [p => p.price < 1000],
 });
 ```
@@ -103,7 +103,7 @@ Quick shortcut to open a database and collection in one call.
 const users = db<User>("./data", "users");
 ```
 
-### `searchHelper<T, K>(db: Database<T, K>, options?: SearchHelperOptions<T>): Array<{ key: K; value: T }>`
+### `search<T, K>(db: Database<T, K>, options?: SearchOptions<T>): Array<{ key: K; value: T }>`
 
 Perform advanced search on an LMDB database.
 
@@ -120,7 +120,7 @@ Perform advanced search on an LMDB database.
 #### Search Options
 
 ```typescript
-interface SearchHelperOptions<T> {
+interface SearchOptions<T> {
   /** Key prefix to filter results (efficient range query) */
   prefix?: string;
   
@@ -133,7 +133,10 @@ interface SearchHelperOptions<T> {
   /** Array of filter functions - all must return true */
   filters?: Array<(value: T, key: string) => boolean>;
   
-  /** Deep search - searches for text in any string field (recursive) */
+  /** Query text - searches for text in any string field (recursive) */
+  query?: string;
+  
+  /** Deprecated: Use query instead. Searches for text in any string field (recursive) */
   deepSearch?: string;
   
   /** Additional LMDB range options (reverse, offset, snapshot, transaction, etc) */
@@ -174,8 +177,8 @@ Search text in any nested field:
 
 ```typescript
 // Finds "gaming" in name, description, tags, or any nested field
-const gamingProducts = searchHelper(products, {
-  deepSearch: "gaming"
+const gamingProducts = search(products, {
+  query: "gaming"
 });
 ```
 
@@ -220,13 +223,13 @@ const top5 = searchHelper(products, {
 Combine all features for powerful queries:
 
 ```typescript
-const results = searchHelper(products, {
+const results = search(products, {
   prefix: "p",                                    // Keys starting with "p"
   filters: [                                      // Multiple filters
     p => p.price < 100,
     p => p.category === "electronics"
   ],
-  deepSearch: "wireless",                        // Search in nested fields
+  query: "wireless",                             // Search in nested fields
   sort: (a, b) => b.price - a.price,            // Sort by price
   limit: 10                                      // Top 10 results
 });
@@ -249,12 +252,12 @@ type BlogPost = {
 const posts = db<BlogPost>("./data", "posts");
 
 // Type-safe query with autocomplete!
-const recentViews = searchHelper(posts, {
+const recentViews = search(posts, {
   filters: [
     post => post.published,
     post => post.views > 1000
   ],
-  deepSearch: "TypeScript",
+  query: "TypeScript",
   sort: (a, b) => b.views - a.views,
   limit: 5
 });
@@ -323,7 +326,7 @@ const top5 = results.slice(0, 5);
 
 ```typescript
 // Clean and powerful
-const results = searchHelper(products, {
+const results = search(products, {
   filters: [
     p => p.price < 100,
     p => p.category === "electronics",
