@@ -1,0 +1,5 @@
+test-db/
+test-db-search/
+test-db-edge/
+*.lock
+*.log

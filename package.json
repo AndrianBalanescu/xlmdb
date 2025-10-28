@@ -1,0 +1,48 @@
+{
+  "name": "xlmdb",
+  "version": "0.1.0",
+  "description": "Advanced search helper for LMDB with TypeScript support - filtering, deep search, sorting, and prefix matching",
+  "keywords": [
+    "lmdb",
+    "database",
+    "search",
+    "query",
+    "filter",
+    "typescript",
+    "key-value",
+    "storage"
+  ],
+  "author": "Andrew <andrewbalanesq@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src/index.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node --format esm --external lmdb",
+    "prepublishOnly": "bun run build",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "example": "bun example/index.ts",
+    "clean": "rm -rf dist example-data test-db* example/data"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "lmdb": "^3.0.4",
+    "typescript": "^5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/xlmdb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/xlmdb/issues"
+  },
+  "homepage": "https://github.com/yourusername/xlmdb#readme"
+}

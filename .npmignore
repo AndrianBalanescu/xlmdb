@@ -1,0 +1,13 @@
+node_modules/
+test/
+example/
+*.ts
+!dist/**/*.js
+tsconfig.json
+.gitignore
+*.log
+.DS_Store
+example-data/
+test-db*/
+bun.lock
+
