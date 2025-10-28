@@ -151,7 +151,7 @@ interface SearchOptions<T> {
 Filter products by price:
 
 ```typescript
-const cheapProducts = searchHelper(products, {
+const cheapProducts = search(products, {
   filters: [p => p.price < 50]
 });
 ```
@@ -161,7 +161,7 @@ const cheapProducts = searchHelper(products, {
 Chain multiple filters (all must pass):
 
 ```typescript
-const filtered = searchHelper(products, {
+const filtered = search(products, {
   filters: [
     p => p.price > 100,
     p => p.price < 1000,
@@ -188,7 +188,7 @@ Efficient key-based filtering:
 
 ```typescript
 // Get all items with keys starting with "user:"
-const users = searchHelper(db, {
+const users = search(db, {
   prefix: "user:"
 });
 ```
@@ -198,11 +198,11 @@ const users = searchHelper(db, {
 Sort by any criteria:
 
 ```typescript
-const sortedByPrice = searchHelper(products, {
+const sortedByPrice = search(products, {
   sort: (a, b) => a.price - b.price  // ascending
 });
 
-const sortedByName = searchHelper(products, {
+const sortedByName = search(products, {
   sort: (a, b) => a.name.localeCompare(b.name)  // alphabetical
 });
 ```
@@ -212,7 +212,7 @@ const sortedByName = searchHelper(products, {
 Get top N results:
 
 ```typescript
-const top5 = searchHelper(products, {
+const top5 = search(products, {
   sort: (a, b) => b.views - a.views,
   limit: 5
 });
@@ -267,7 +267,7 @@ const recentViews = search(posts, {
 
 ```typescript
 const tx = db.beginTransaction();
-const results = searchHelper(products, {
+const results = search(products, {
   rangeOptions: { transaction: tx }
 });
 await tx.commit();
@@ -299,10 +299,9 @@ await tx.commit();
    const affordable = (p: Product) => p.price < 100;
    const inStock = (p: Product) => p.stock > 0;
    
-   const results = searchHelper(products, {
+   const results = search(products, {
      filters: [affordable, inStock]
    });
-   ```
 
 ## Why Use xlmdb?
 
