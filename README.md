@@ -4,6 +4,8 @@
 
 **xlmdb** extends [LMDB](https://github.com/kriszyp/lmdb-js) with powerful search capabilities including filtering, deep search, sorting, and prefix matching - all with full TypeScript type safety.
 
+> ⚠️ **Note**: This is an experimental package. Use at your own risk. The API may change in future versions.
+
 ## Features
 
 - 🔍 **Advanced filtering** - Chain multiple filters with custom logic
