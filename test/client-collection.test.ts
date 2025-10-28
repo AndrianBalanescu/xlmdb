@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "bun:test";
 import { open } from "lmdb";
-import { searchHelper } from "../src/index.ts";
+import { search } from "../src/index.ts";
 import { rm, mkdir } from "fs/promises";
 
 describe("xlmdb", () => {
@@ -44,7 +44,7 @@ describe("xlmdb", () => {
     expect(products.get("p1")).toBeUndefined();
   });
 
-  it("should work with searchHelper", async () => {
+  it("should work with search", async () => {
     type Product = { name: string; price: number };
     const products = db.openDB<Product, string>({ name: "products" });
 
@@ -52,7 +52,7 @@ describe("xlmdb", () => {
     await products.put("p2", { name: "Mouse", price: 29 });
     await products.put("p3", { name: "Keyboard", price: 79 });
 
-    const results = searchHelper(products, {
+    const results = search(products, {
       filters: [p => p.price < 100],
     });
 
@@ -67,8 +67,8 @@ describe("xlmdb", () => {
     await items.put("i:1", { name: "Pen" });
     await items.put("i:2", { name: "Book", details: { description: "A story about a blue pen." } });
 
-    const results = searchHelper(items, {
-      deepSearch: "pen",
+    const results = search(items, {
+      query: "pen",
     });
 
     expect(results.length).toBeGreaterThanOrEqual(1); // At least Pen matches

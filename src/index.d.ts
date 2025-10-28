@@ -3,7 +3,7 @@ import type { Database, RangeOptions } from "lmdb";
 /**
  * Advanced search options that can be applied to any LMDB Database
  */
-export type SearchHelperOptions<T> = {
+export type SearchOptions<T> = {
   /** Key prefix to filter results */
   prefix?: string;
   /** Maximum number of results to return */
@@ -22,9 +22,9 @@ export type SearchHelperOptions<T> = {
  * Performs advanced search on an LMDB Database with TypeScript filters,
  * deep search capabilities, and custom sorting.
  */
-export function searchHelper<T, K extends string = string>(
+export function search<T, K extends string = string>(
   db: Database<T, K>,
-  options?: SearchHelperOptions<T>
+  options?: SearchOptions<T>
 ): Array<{ key: K; value: T }>;
 
 /**

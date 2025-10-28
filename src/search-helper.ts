@@ -4,7 +4,7 @@ import { open } from "lmdb";
 /**
  * Advanced search options that can be applied to any LMDB Database
  */
-export type SearchHelperOptions<T> = {
+export type SearchOptions<T> = {
   /** Key prefix to filter results */
   prefix?: string;
   /** Maximum number of results to return */
@@ -15,6 +15,8 @@ export type SearchHelperOptions<T> = {
   filters?: Array<(value: T, key: string) => boolean>;
   /** Deep search - searches for text in any string field (recursive) */
   deepSearch?: string;
+  /** Query text - alias for deepSearch (searches in any string field) */
+  query?: string;
   /** Additional LMDB range options (reverse, offset, snapshot, transaction, etc) */
   rangeOptions?: Omit<RangeOptions, "start" | "end" | "limit">;
 };
@@ -23,9 +25,9 @@ export type SearchHelperOptions<T> = {
  * Performs advanced search on an LMDB Database with TypeScript filters,
  * deep search capabilities, and custom sorting.
  */
-export function searchHelper<T, K extends string = string>(
+export function search<T, K extends string = string>(
   db: Database<T, K>,
-  options: SearchHelperOptions<T> = {}
+  options: SearchOptions<T> = {}
 ): Array<{ key: K; value: T }> {
   const start = options.prefix ?? "";
   const end = start ? start + "￿" : undefined;
@@ -43,8 +45,8 @@ export function searchHelper<T, K extends string = string>(
 
   // Combine all filters including deepSearch
   const allFilters = [...(options.filters ?? [])];
-  if (options.deepSearch) {
-    const searchText = options.deepSearch.toLowerCase();
+  const searchText = (options.deepSearch || options.query)?.toLowerCase();
+  if (searchText) {
     allFilters.push((value) => deepSearchHelper(value, searchText));
   }
 
