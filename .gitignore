@@ -11,3 +11,4 @@ example/data/
 *.tgz
 .cursor/
 PUBLISH.md
+bookmarks.json

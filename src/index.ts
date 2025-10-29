@@ -1,3 +1,3 @@
-// Just export our search helper and convenience function
+// Just export our search helper
 // Import LMDB separately: import { open } from "lmdb";
-export { search, search as searchHelper, db, type SearchOptions, type SearchOptions as SearchHelperOptions } from "./search-helper.ts";
+export { search, search as searchHelper, type SearchOptions, type SearchOptions as SearchHelperOptions } from "./search-helper.ts";

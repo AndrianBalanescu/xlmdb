@@ -27,8 +27,3 @@ export function search<T, K extends string = string>(
   options?: SearchOptions<T>
 ): Array<{ key: K; value: T }>;
 
-/**
- * Quick shortcut to open a database and collection in one call
- */
-export function db<T>(path: string, name: string): Database<T, string>;
-

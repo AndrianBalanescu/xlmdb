@@ -1,5 +1,5 @@
 import { open } from "lmdb";
-import { search, db as quickDb } from "../src/index.ts";
+import { search } from "../src/index.ts";
 import { rm, mkdir } from "fs/promises";
 
 type Product = {
@@ -15,8 +15,9 @@ async function main() {
   await rm(dbPath, { recursive: true, force: true }).catch(() => {});
   await mkdir(dbPath, { recursive: true });
 
-  // Quick shortcut: db(path, name) - opens DB and collection in one call
-  const products = quickDb<Product>(dbPath, "products");
+  // Open database and collection
+  const root = open({ path: dbPath });
+  const products = root.openDB<Product, string>({ name: "products" });
 
   // Add products with nested data
   await products.put("p1", { 

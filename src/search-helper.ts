@@ -1,5 +1,4 @@
 import type { Database, RangeOptions } from "lmdb";
-import { open } from "lmdb";
 
 /**
  * Advanced search options that can be applied to any LMDB Database
@@ -91,10 +90,3 @@ function deepSearchHelper(obj: any, text: string, visited = new WeakSet()): bool
   return false;
 }
 
-/**
- * Quick shortcut to open a database and collection in one call
- */
-export function db<T>(path: string, name: string) {
-  const root = open({ path });
-  return root.openDB<T, string>({ name });
-}
