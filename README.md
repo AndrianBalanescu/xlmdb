@@ -366,6 +366,19 @@ bun run example:shelter
 
 Or check out the [example directory](./example/) for more use cases.
 
+## Web UI Explorer
+
+Explore your LMDB databases with a beautiful web interface! **xlmdb** is being used in [local-lmdb-explorer](https://github.com/AndrianBalanescu/local-lmdb-explorer), a local web UI that lets you:
+
+- 🔍 **Deep search** across all database fields
+- 🎯 **Advanced filtering** with operators (=, !=, >, <, >=, <=)
+- 📊 **Custom sorting** by any field
+- 🔎 **Automatic database scanner** to discover all `.mdb` files
+- 📑 **Bookmarks** for quick database access
+- ⚡ **Real-time results** as you type
+
+Check it out at: https://github.com/AndrianBalanescu/local-lmdb-explorer
+
 ## Testing
 
 ```bash
