@@ -29,7 +29,8 @@ pnpm add xlmdb lmdb
 ## Quick Start
 
 ```typescript
-import { db, search } from "xlmdb";
+import { open } from "lmdb";
+import { search } from "xlmdb";
 
 // Define your types
 type Product = {
@@ -40,8 +41,9 @@ type Product = {
   tags?: string[];
 };
 
-// Create database and collection in one line
-const products = db<Product>("./data", "products");
+// Open database and collection
+const root = open({ path: "./data" });
+const products = root.openDB<Product, string>({ name: "products" });
 
 // Add some data
 await products.put("p1", { 
@@ -89,21 +91,6 @@ const results = search(products, {
 ```
 
 ## API Reference
-
-### `db<T>(path: string, name: string): Database<T, string>`
-
-Quick shortcut to open a database and collection in one call.
-
-**Parameters:**
-- `path` - Database path
-- `name` - Collection/database name
-
-**Returns:** LMDB Database instance
-
-**Example:**
-```typescript
-const users = db<User>("./data", "users");
-```
 
 ### `search<T, K>(db: Database<T, K>, options?: SearchOptions<T>): Array<{ key: K; value: T }>`
 
@@ -189,8 +176,13 @@ const gamingProducts = search(products, {
 Efficient key-based filtering:
 
 ```typescript
+import { open } from "lmdb";
+import { search } from "xlmdb";
+
 // Get all items with keys starting with "user:"
-const users = search(db, {
+const root = open({ path: "./data" });
+const users = root.openDB<User, string>({ name: "users" });
+const results = search(users, {
   prefix: "user:"
 });
 ```
@@ -242,6 +234,9 @@ const results = search(products, {
 With TypeScript generics, you get full type safety:
 
 ```typescript
+import { open } from "lmdb";
+import { search } from "xlmdb";
+
 type BlogPost = {
   title: string;
   content: string;
@@ -251,7 +246,8 @@ type BlogPost = {
   views: number;
 };
 
-const posts = db<BlogPost>("./data", "posts");
+const root = open({ path: "./data" });
+const posts = root.openDB<BlogPost, string>({ name: "posts" });
 
 // Type-safe query with autocomplete!
 const recentViews = search(posts, {
@@ -268,7 +264,12 @@ const recentViews = search(posts, {
 ### 9. Using with Transactions
 
 ```typescript
-const tx = db.beginTransaction();
+import { open } from "lmdb";
+import { search } from "xlmdb";
+
+const root = open({ path: "./data" });
+const products = root.openDB<Product, string>({ name: "products" });
+const tx = root.beginTransaction();
 const results = search(products, {
   rangeOptions: { transaction: tx }
 });
@@ -286,9 +287,10 @@ await tx.commit();
 
 ### TypeScript Tips
 
-1. **Always specify types** when using `db()` helper:
+1. **Always specify types** when opening databases:
    ```typescript
-   const products = db<Product>("./data", "products");
+   const root = open({ path: "./data" });
+   const products = root.openDB<Product, string>({ name: "products" });
    ```
 
 2. **Use const assertions** for better inference:

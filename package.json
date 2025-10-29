@@ -1,6 +1,6 @@
 {
   "name": "xlmdb",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Advanced search helper for LMDB with TypeScript support - filtering, deep search, sorting, and prefix matching (experimental)",
   "keywords": [
     "lmdb",
