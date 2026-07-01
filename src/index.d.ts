@@ -14,6 +14,8 @@ export type SearchOptions<T> = {
   filters?: Array<(value: T, key: string) => boolean>;
   /** Deep search - searches for text in any string field (recursive) */
   deepSearch?: string;
+  /** Query text - alias for deepSearch (searches in any string field) */
+  query?: string;
   /** Additional LMDB range options (reverse, offset, snapshot, transaction, etc) */
   rangeOptions?: Omit<RangeOptions, "start" | "end" | "limit">;
 };
@@ -26,4 +28,10 @@ export function search<T, K extends string = string>(
   db: Database<T, K>,
   options?: SearchOptions<T>
 ): Array<{ key: K; value: T }>;
+
+/** Alias for search */
+export declare const searchHelper: typeof search;
+
+/** Alias for SearchOptions */
+export type SearchHelperOptions<T> = SearchOptions<T>;
 

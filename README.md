@@ -361,7 +361,7 @@ Try the included examples:
 bun run example
 
 # Run the animal shelter example
-bun run example:shelter
+bun run example
 ```
 
 Or check out the [example directory](./example/) for more use cases.

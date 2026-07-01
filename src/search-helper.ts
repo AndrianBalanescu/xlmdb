@@ -49,18 +49,22 @@ export function search<T, K extends string = string>(
     allFilters.push((value) => deepSearchHelper(value, searchText));
   }
 
-  // Iterate and filter
+  // Iterate and filter — collect ALL matching results first
   for (const { key, value } of iterable) {
     if (allFilters.length > 0 && !allFilters.every((f) => f(value as T, key as string))) {
       continue;
     }
     results.push({ key: key as K, value: value as T });
-    if (results.length >= limit) break;
   }
 
-  // Apply custom sorting if provided
+  // Apply custom sorting BEFORE limit (sort must see the full set)
   if (options.sort) {
     results.sort((a, b) => options.sort!(a.value, b.value));
+  }
+
+  // Apply limit AFTER sorting so we get the correct top-N results
+  if (results.length > limit) {
+    results.length = limit;
   }
 
   return results;
@@ -82,7 +86,7 @@ function deepSearchHelper(obj: any, text: string, visited = new WeakSet()): bool
     visited.add(obj);
     
     for (const key in obj) {
-      if (deepSearchHelper(obj[key], text, visited)) {
+      if (Object.hasOwn(obj, key) && deepSearchHelper(obj[key], text, visited)) {
         return true;
       }
     }
